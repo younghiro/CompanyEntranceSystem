@@ -17,11 +17,14 @@ namespace CompanyEntranceSystem
         }
     }
 
+
+    /// should I use generic method or overload to shorten code???
+
     public class Worker : Human
     {
         public string Department { get; set; }
 
-        void printOptions()
+        public static void printOptions()
         {
             Console.WriteLine("Please choose from one of following options");
             Console.WriteLine("1. attendance at work");
@@ -30,7 +33,7 @@ namespace CompanyEntranceSystem
             Console.WriteLine("4. exit");
         }
 
-        void attend() //1 take parameter
+        public static void attend( Worker currentWorker) //1 take parameter
         {
             Console.WriteLine("Please push 1 to start your work or 2 to go back");
             int check = int.Parse(Console.ReadLine());
@@ -39,13 +42,16 @@ namespace CompanyEntranceSystem
                 if (check == 1)
                 {
                     //check if the person is working
-                    //if( false){
-                    //Console.WriteLine("You are already working in this system. Please contact our management department. ");
-                    //}else{
-                    //switch thier state to true}
+                    if ( currentWorker.State == true)
+                    {
+                        Console.WriteLine("You are already working in this system. Please contact our management department. ");
+                    }
+                    else
+                    {
+                        currentWorker.State = true;
+                    }
 
-
-                    Console.WriteLine("we put you in our working list"); //Console.WriteLine("we put " +  call user name  " in our working list");
+                    Console.WriteLine("we put " +  currentWorker.Name  +" in our working list");
                     printOptions();
 
                 }
@@ -56,11 +62,11 @@ namespace CompanyEntranceSystem
             }
             catch
             {
-                attend();
+                attend(currentWorker);
             }
         }
 
-        void leavingWork() //2 take parameter
+        public static void leavingWork(Worker currentWorker) //2 take parameter
         {
             Console.WriteLine("Please push 1 to start your work or 2 to go back");
             int check = int.Parse(Console.ReadLine());
@@ -68,17 +74,17 @@ namespace CompanyEntranceSystem
             {
                 if (check == 1)
                 {
-                    //check if the person aleady left
-                    //if( true){
-                    //Console.WriteLine("You already left in this system. Please contact our management department. ");
-                    //}
-                    //else{
-                    //switch thier state to false
-                    //}
-
+                    if (currentWorker.State == false)
+                    {
+                        Console.WriteLine("You already left in this system. Please contact our management department. ");
+                    }
+                    else
+                    {
+                        currentWorker.State = false;
+                    }
 
                     Console.WriteLine("Thank you for the working and we get you off from our working list.");
-                    //Console.WriteLine("Thank you  for the working and we get " +  call user name  " off from our working list."); 
+                    Console.WriteLine("Thank you  for the working and we get " + currentWorker.Name + " off from our working list."); 
                     printOptions();
 
                 }
@@ -89,21 +95,28 @@ namespace CompanyEntranceSystem
             }
             catch
             {
-                leavingWork();
+                leavingWork(currentWorker);
+            }
+        }
+        /////////////////
+        public static void seeState(Worker currentWorker) //3 take parameter
+        {
+            db showWorkers = new db();
+            Console.WriteLine(" true is working");
+            foreach (Worker a in showWorkers.workers)
+            {
+                Console.WriteLine("{0} ; {1} ; {2}", a.Name, a.Department, a.State);
             }
         }
 
-        void seeState() //3 take parameter
-        {
-            //if the user is a visitor, we don't show them
-            //first sort them based on state
-            //after that show only their names and explantions and positions
-            Console.WriteLine();
-        }
-
-        private Worker(string name, int password, string department,int companyNumber, bool state) : base(name, password, companyNumber,state)
+        public Worker(string name, int password, string department,int companyNumber, bool state) : base(name, password, companyNumber,state)
         {
             Department = department;
+        }
+
+        public override string ToString()
+        {
+            return $"welcome {Name}";
         }
     }
 
@@ -111,7 +124,7 @@ namespace CompanyEntranceSystem
     {
         public string Explanation { get; set; }
 
-        void printOptions_visitor()
+        public static void printOptions()
         {
             Console.WriteLine("Please choose from one of following options");
             Console.WriteLine("1. attendance");
@@ -119,40 +132,81 @@ namespace CompanyEntranceSystem
             Console.WriteLine("3. exit");
         }
 
-        void attend_visitor() //1 take parameter  
+        public static void attend(Visitor currentVisitor) //1  
         {
-            Console.WriteLine("Please push 1 to start your work or 2 to go back");
+            Console.WriteLine("Please push 1 to enter or 2 to go back");
             int check = int.Parse(Console.ReadLine());
             try
             {
                 if (check == 1)
                 {
-                    //check if the person is working
-                    //if( false){
-                    //Console.WriteLine("You are already working in this system. Please contact our management department. ");
-                    //}else{
-                    //switch thier state to true}
+                    if (currentVisitor.State == true)
+                    {
+                        Console.WriteLine("You are already working in this system. Please contact our management department. ");
+                    }
+                    else
+                    {
+                        currentVisitor.State = true;
+                    }
 
-
-                    Console.WriteLine("we put you in our working list"); //Console.WriteLine("we put " +  call user name  " in our working list");
-                    printOptions_visitor();
+                    Console.WriteLine("we put you in our working list");
+                    Console.WriteLine("we put " + currentVisitor.Name +" in our working list");
+                    printOptions();
 
                 }
                 else if (check == 2)
                 {
-                    printOptions_visitor();
+                    printOptions();
                 }
             }
             catch
             {
-                attend_visitor();
+                attend(currentVisitor);
             }
         }
 
-        private Visitor(string name, int password, string explanation, int companyNumber, bool state) :  base(name, password, companyNumber, state)
+        public static void leaving(Visitor currentVisitor) //2 
+        {
+            Console.WriteLine("Please push 1 to leave or 2 to go back");
+            int check = int.Parse(Console.ReadLine());
+            try
+            {
+                if (check == 1)
+                {
+                    if (currentVisitor.State == false )
+                    {
+                        Console.WriteLine("You already left in this system. Please contact our management department. ");
+                    }
+                    else
+                    {
+                        currentVisitor.State = false;
+                    }
+
+                    Console.WriteLine("Thank you for the working and we get you off from our working list.");
+                    Console.WriteLine("Thank you  for the working and we get " + currentVisitor.Name + " off from our working list."); 
+                    printOptions();
+
+                }
+                else if (check == 2)
+                {
+                    printOptions();
+                }
+            }
+            catch
+            {
+                leaving(currentVisitor);
+            }
+        }
+
+        public Visitor(string name, int password, string explanation, int companyNumber, bool state) :  base(name, password, companyNumber, state)
         {
             Explanation = explanation;
             password = 000;
+        }
+
+        public override string ToString()
+        {
+            return $"welcome {Name}, we accept you with the reason( {Explanation} )";
         }
     }
     

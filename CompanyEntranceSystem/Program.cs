@@ -7,27 +7,64 @@
 //log in
 ///////////////
 Console.WriteLine("Welcome to CZU company");
-//check ur worker or visitor
-//ここでクラスのインスタンスを作る cardholder currentUser;
 Console.WriteLine("Please type your company worker number: ");
 int worker_number = 0;
+int company_passowrd = 0;
+int checkVisitorOrWorker = 0;
+db visitor = new db();
+db worker = new db();
+Visitor currentVisitor = null;
+Worker currentWorker = null;
 while (true)
 {
     try
     {
         worker_number = int.Parse(Console.ReadLine());
         //a object is created by return value.
-        if( worker_number == 000 )
+        if( worker_number == 000)  //check ur worker or visitor and here is for visitor
         {
-            //Check against our db
-            //current = currentUser.FirstOrDefault( a => a.companyNumber ==worker_number) //FirstOrDefault is to enumerate ,serach for certain property ,and return the object
+            Console.WriteLine("Please type your password: ");
+            while (true)
+            {
+                try
+                {
+                    company_passowrd = int.Parse(Console.ReadLine());
+                    //Check against our db
+                    currentVisitor = visitor.visitors.FirstOrDefault(a => a.PassWord == company_passowrd); //FirstOrDefault is to enumerate ,serach for certain property ,and return the object
+                    //Console.WriteLine(currentVisitor.ToString());//////test
+                    if (currentVisitor != null) { break; }
+                }
+                catch
+                {
+                    notice();
+                }
+            }
         }
         else
         {
-            //Check against our db
-            //current = currentUser.FirstOrDefault( a => a.companyNumber ==worker_number) //FirstOrDefault is to enumerate ,serach for certain property ,and return the object
+            Console.WriteLine("Please type your password: ");
+            while (true)
+            {
+                try
+                {
+                    company_passowrd = int.Parse(Console.ReadLine());
+                    //Check against our db
+                    currentWorker = worker.workers.FirstOrDefault(a => a.PassWord == company_passowrd); //FirstOrDefault is to enumerate ,serach for certain property ,and return the object
+                    if (currentWorker != null)
+                    {
+                        checkVisitorOrWorker = 1;
+                        break;
+                    }
+                    else { notice(); }
+                }
+                catch
+                {
+                    notice();
+                }
+            }
         }
-        if (currentUser != null ) // || visitor 
+
+        if (currentVisitor != null || currentWorker != null)
         {
             break;
         }
@@ -38,50 +75,24 @@ while (true)
         notice();
     }
 }
-//もし000  この後の処理は続けて書く？
 
+Console.WriteLine(currentVisitor.ToString());
 
-Console.WriteLine("Please type your password: ");
-int company_passowrd = 0;
-
-
-
-while (true) 
-{
-    try
-    {
-        company_passowrd = int.Parse(Console.ReadLine());
-        //Check against our db
-        //current = currentUser.FirstOrDefault( a => a.password ==company_passowrd) //FirstOrDefault is to enumerate ,serach for certain property ,and return the object
-        if (currentUser != null) { break; }//ここでworkerかvisitorでオブジェクト
-        else { notice(); }
-    }
-    catch
-    {
-        notice();
-    }
-}
-
-
-
-
-
-//Console.WriteLine("Welcome " + //ここに名前をクラスからとる　　+" ;) ");
 int option = 0;
 
-if ()//worker
+if (checkVisitorOrWorker == 1)//worker 
 {
     do
     {
-        printOptions();
+        Worker.printOptions();
         try
         {
             option = int.Parse(Console.ReadLine());
         }
         catch { }
-        if (option == 1) { attend(); } //ここに変数を渡す
-        else if (option == 2) { }
-        else if (option == 3) { }
+        if (option == 1) { Worker.attend(currentWorker); } //ここに変数を渡す
+        else if (option == 2) { Worker.leavingWork(currentWorker); }
+        else if (option == 3) { Worker.seeState(currentWorker); }
         else if (option == 4) { break; }
         else { option = 0; }
     } while (option != 4);
@@ -93,14 +104,14 @@ else//visitor
 {
     do
     {
-        printOptions_visitor();
+        Visitor.printOptions();
         try
         {
             option = int.Parse(Console.ReadLine());
         }
         catch { }
-        if (option == 1) { attend(); } //ここに変数を渡す
-        else if (option == 2) { }
+        if (option == 1) { Visitor.attend(currentVisitor); } //ここに変数を渡す
+        else if (option == 2) { Visitor.leaving(currentVisitor); }
         else if (option == 3) { break; }
         else { option = 0; }
     } while (option != 3);
