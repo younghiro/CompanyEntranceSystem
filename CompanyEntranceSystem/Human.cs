@@ -8,6 +8,7 @@ namespace CompanyEntranceSystem
         public int CompanyNumber { get; set; }
         public bool State { get; set; }　//true means the person is already inside
 
+        //constructor
         protected Human(string name, int password, int companyNumber, bool state)
         {
             Name = name;
@@ -16,9 +17,6 @@ namespace CompanyEntranceSystem
             State = state;
         }
     }
-
-
-    /// should I use generic method or overload to shorten code???
 
     public class Worker : Human
     {
@@ -33,7 +31,11 @@ namespace CompanyEntranceSystem
             Console.WriteLine("4. exit");
         }
 
-        public static void attend( Worker currentWorker) //1 take parameter
+        /// <summary>
+        /// This method records whether a worker has entered.
+        /// </summary>
+        /// <param name="currentWorker">this parameter is produced by password</param>
+        public static void attend( Worker currentWorker) 
         {
             Console.WriteLine("Please push 1 to start your work or 2 to go back");
             int check = int.Parse(Console.ReadLine());
@@ -45,15 +47,15 @@ namespace CompanyEntranceSystem
                     if ( currentWorker.State == true)
                     {
                         Console.WriteLine("You are already working in this system. Please contact our management department. ");
+                        Console.ReadLine();
                     }
                     else
                     {
                         currentWorker.State = true;
+                        Console.ReadLine();
+                        Console.WriteLine("we put " +  currentWorker.Name  +" in our working list");
+                        Console.ReadLine();
                     }
-
-                    Console.WriteLine("we put " +  currentWorker.Name  +" in our working list");
-                    printOptions();
-
                 }
                 else if (check == 2)
                 {
@@ -62,13 +64,18 @@ namespace CompanyEntranceSystem
             }
             catch
             {
+
                 attend(currentWorker);
             }
         }
 
-        public static void leavingWork(Worker currentWorker) //2 take parameter
+        /// <summary>
+        /// This method records whether a worker has left.
+        /// </summary>
+        /// <param name="currentWorker">this parameter is produced by password</param>
+        public static void leavingWork(Worker currentWorker) 
         {
-            Console.WriteLine("Please push 1 to start your work or 2 to go back");
+            Console.WriteLine("Please push 1 to finish today's work or 2 to go back");
             int check = int.Parse(Console.ReadLine());
             try
             {
@@ -77,16 +84,14 @@ namespace CompanyEntranceSystem
                     if (currentWorker.State == false)
                     {
                         Console.WriteLine("You already left in this system. Please contact our management department. ");
+                        Console.ReadLine();
                     }
                     else
                     {
                         currentWorker.State = false;
+                        Console.WriteLine("Thank you  for the working and we get " + currentWorker.Name + " off from our working list.");
+                        Console.ReadLine();
                     }
-
-                    Console.WriteLine("Thank you for the working and we get you off from our working list.");
-                    Console.WriteLine("Thank you  for the working and we get " + currentWorker.Name + " off from our working list."); 
-                    printOptions();
-
                 }
                 else if (check == 2)
                 {
@@ -98,22 +103,33 @@ namespace CompanyEntranceSystem
                 leavingWork(currentWorker);
             }
         }
-        /////////////////
-        public static void seeState(Worker currentWorker) //3 take parameter
+
+        /// <summary>
+        /// This method show the record to only workers.
+        /// </summary>
+        /// <param name="currentWorker">this parameter is produced by password</param>
+        public static void seeState(Worker currentWorker) 
         {
-            db showWorkers = new db();
-            Console.WriteLine(" true is working");
-            foreach (Worker a in showWorkers.workers)
+            Console.WriteLine("-----------");
+            foreach (Worker a in db.workers)
             {
-                Console.WriteLine("{0} ; {1} ; {2}", a.Name, a.Department, a.State);
+                if (a.State== true)
+                {
+                    Console.WriteLine("{0} ({1}) is working now", a.Name, a.Department);
+                }else if(a.State == false){
+                    Console.WriteLine("{0} ({1}) is not working now", a.Name, a.Department);
+                }
             }
+            Console.WriteLine("-----------");
         }
 
+        //constructor
         public Worker(string name, int password, string department,int companyNumber, bool state) : base(name, password, companyNumber,state)
         {
             Department = department;
         }
 
+        // overriding the ToString() method to show welcome message to a worker
         public override string ToString()
         {
             return $"welcome {Name}";
@@ -132,7 +148,11 @@ namespace CompanyEntranceSystem
             Console.WriteLine("3. exit");
         }
 
-        public static void attend(Visitor currentVisitor) //1  
+        /// <summary>
+        /// This method records whether a visitor has entered.
+        /// </summary>
+        /// <param name="currentWorker">this parameter is produced by password</param>
+        public static void attend(Visitor currentVisitor)
         {
             Console.WriteLine("Please push 1 to enter or 2 to go back");
             int check = int.Parse(Console.ReadLine());
@@ -143,16 +163,13 @@ namespace CompanyEntranceSystem
                     if (currentVisitor.State == true)
                     {
                         Console.WriteLine("You are already working in this system. Please contact our management department. ");
+                        Console.ReadLine();
                     }
                     else
                     {
                         currentVisitor.State = true;
+                        Console.WriteLine("we put " + currentVisitor.Name + " in our working list");
                     }
-
-                    Console.WriteLine("we put you in our working list");
-                    Console.WriteLine("we put " + currentVisitor.Name +" in our working list");
-                    printOptions();
-
                 }
                 else if (check == 2)
                 {
@@ -165,7 +182,11 @@ namespace CompanyEntranceSystem
             }
         }
 
-        public static void leaving(Visitor currentVisitor) //2 
+        /// <summary>
+        /// This method records whether a visitor has left.
+        /// </summary>
+        /// <param name="currentWorker">this parameter is produced by password</param>
+        public static void leaving(Visitor currentVisitor)
         {
             Console.WriteLine("Please push 1 to leave or 2 to go back");
             int check = int.Parse(Console.ReadLine());
@@ -176,16 +197,13 @@ namespace CompanyEntranceSystem
                     if (currentVisitor.State == false )
                     {
                         Console.WriteLine("You already left in this system. Please contact our management department. ");
+                        Console.ReadLine();
                     }
                     else
                     {
                         currentVisitor.State = false;
+                        Console.WriteLine("Thank you  for the working and we get " + currentVisitor.Name + " off from our working list.");
                     }
-
-                    Console.WriteLine("Thank you for the working and we get you off from our working list.");
-                    Console.WriteLine("Thank you  for the working and we get " + currentVisitor.Name + " off from our working list."); 
-                    printOptions();
-
                 }
                 else if (check == 2)
                 {
@@ -198,12 +216,14 @@ namespace CompanyEntranceSystem
             }
         }
 
+        //constructor
         public Visitor(string name, int password, string explanation, int companyNumber, bool state) :  base(name, password, companyNumber, state)
         {
             Explanation = explanation;
             password = 000;
         }
 
+        // overriding the ToString() method to show welcome message to a visitor
         public override string ToString()
         {
             return $"welcome {Name}, we accept you with the reason( {Explanation} )";
