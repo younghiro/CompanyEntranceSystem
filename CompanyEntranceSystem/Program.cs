@@ -21,7 +21,7 @@ while (true) {
         {
             int worker_number = 0;
             int check_worker_number = 0;
-            Console.WriteLine("Please type your company worker number: ");
+            Console.WriteLine("Please type your company worker number: (visitors must type 000");
             worker_number = int.Parse(Console.ReadLine());
             //a object is created by user's input.
             if (worker_number == 000)  //check a worker or a visitor by visitor's work number which is 000
